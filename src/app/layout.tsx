@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png", // ✅ coloque esse arquivo em /public/og-image.jpg (1200x630)
+        url: "/og-image-v2.png", // ✅ coloque esse arquivo em /public/og-image.jpg (1200x630)
         width: 1200,
         height: 630,
         alt: "L.A. Locadora - Experiência Premium em Locação",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     title: "L.A. LOCADORA | Experiência Premium em Locação",
     description:
       "Elevando o padrão de locação de veículos exclusivos. Conforto, agilidade e segurança em cada quilômetro.",
-    images: ["/og-image.png"],
+    images: ["/og-image-v2..png"],
   },
 
   // ✅ Ícones
