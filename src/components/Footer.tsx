@@ -65,7 +65,7 @@ export default function Footer() {
               {["Início", "Frota", "Empresa", "Contato"].map((item) => (
                 <li key={item}>
                   <a 
-                    href={`#${item.toLowerCase()}`} 
+                    href={`/${item.toLowerCase()}`} 
                     className="text-gray-400 hover:text-white text-[11px] uppercase tracking-widest font-black transition-all group flex items-center gap-2"
                   >
                     <span className="w-0 h-[1px] bg-brand-blue group-hover:w-3 transition-all"></span>
