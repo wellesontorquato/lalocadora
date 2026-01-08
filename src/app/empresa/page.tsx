@@ -16,10 +16,12 @@ import {
 } from "lucide-react";
 
 export default function PaginaEmpresa() {
-  const WHATS_NUMBER = "5582996906585"; // só dígitos
-  const WHATS_MESSAGE = encodeURIComponent(
-    "Olá! Quero alugar um carro em Maceió e solicitar uma reserva com a L.A. Locadora. Pode me ajudar?"
-  );
+  const WHATS_NUMBER = "5582996906585"; // (mantido aqui caso você use no /contato)
+  const WHATS_MESSAGE =
+    "Olá! Quero alugar um carro em Maceió e solicitar uma reserva com a L.A. Locadora. Pode me ajudar?";
+
+  // ✅ Agora o CTA vai para /contato (com msg opcional)
+  const contatoHref = `/contato?msg=${encodeURIComponent(WHATS_MESSAGE)}`;
 
   const diferenciais = [
     {
@@ -122,19 +124,22 @@ export default function PaginaEmpresa() {
             className="mt-5 max-w-[920px] text-gray-400 leading-relaxed text-lg md:text-xl"
           >
             A L.A. Locadora nasceu para entregar uma experiência premium de{" "}
-            <strong className="text-gray-200">aluguel de carro em Maceió</strong>: simples, segura e com atendimento rápido.
-            Aqui você entende como funciona a locação, sem burocracia — e resolve tudo com clareza pelo WhatsApp.
+            <strong className="text-gray-200">aluguel de carro em Maceió</strong>: simples,
+            segura e com atendimento rápido. Aqui você entende como funciona a locação,
+            sem burocracia — e resolve tudo com clareza.
           </motion.p>
 
-          {/* CTA topo */}
+          {/* ✅ CTA topo agora vai para /contato */}
           <motion.a
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.16 }}
-            href={`https://wa.me/${WHATS_NUMBER}?text=${WHATS_MESSAGE}`}
+            href={contatoHref}
             className="mt-7 inline-flex items-center gap-3 border border-white/15 hover:border-brand-blue/60 bg-white/5 hover:bg-brand-blue/10 px-5 py-3 transition-all duration-500"
           >
-            <span className="text-[11px] uppercase tracking-[0.25em] font-black">Falar no WhatsApp</span>
+            <span className="text-[11px] uppercase tracking-[0.25em] font-black">
+              Ir para Contato
+            </span>
             <ArrowRight size={16} className="opacity-80" />
           </motion.a>
         </div>
@@ -163,10 +168,10 @@ export default function PaginaEmpresa() {
               A L.A. Locadora foi criada para elevar o padrão de locação de veículos,
               oferecendo uma experiência premium, sem burocracia e com foco total em
               conforto, segurança e agilidade — do orçamento à devolução. Se você busca{" "}
-              <strong className="text-gray-200">aluguel de carro em Maceió</strong> com clareza e suporte, é aqui.
+              <strong className="text-gray-200">aluguel de carro em Maceió</strong> com clareza
+              e suporte, é aqui.
             </p>
 
-            {/* pontos rápidos (sem inventar número) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/10 pt-8">
               <div className="flex items-start gap-3">
                 <ShieldCheck className="text-brand-blue mt-1" size={18} />
@@ -258,7 +263,7 @@ export default function PaginaEmpresa() {
           </span>
 
           <h3 className="text-3xl md:text-4xl font-black tracking-tight">
-            Do WhatsApp à retirada: aluguel de carro em Maceió sem burocracia.
+            Do contato à retirada: aluguel de carro em Maceió sem burocracia.
           </h3>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -346,23 +351,23 @@ export default function PaginaEmpresa() {
             ))}
           </div>
 
-          {/* CTA final */}
+          {/* ✅ CTA final agora vai para /contato */}
           <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-white/10 bg-white/5 p-6">
             <div>
               <p className="text-[10px] uppercase tracking-[0.35em] text-gray-500 font-black">
                 Pronto pra reservar?
               </p>
               <p className="mt-2 text-gray-300 leading-relaxed">
-                Chama no WhatsApp e a gente confirma disponibilidade e valores do seu aluguel de carro em Maceió.
+                Clique para ir para a página de contato e solicitar sua reserva.
               </p>
             </div>
 
             <a
-              href={`https://wa.me/${WHATS_NUMBER}?text=${WHATS_MESSAGE}`}
+              href={contatoHref}
               className="inline-flex items-center gap-3 border border-white/15 hover:border-brand-blue/60 bg-brand-blue/10 hover:bg-brand-blue/20 px-5 py-3 transition-all duration-500"
             >
               <span className="text-[11px] uppercase tracking-[0.25em] font-black">
-                Solicitar no WhatsApp
+                Ir para Contato
               </span>
               <ArrowRight size={16} className="opacity-80" />
             </a>
