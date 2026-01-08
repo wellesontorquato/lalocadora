@@ -383,7 +383,7 @@ export default function FormularioContato() {
             <button
               type="submit"
               disabled={!pronto}
-              className="group flex items-center gap-6 text-white transition-all duration-500 ease-out hover:translate-x-3 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-x-0 cursor-text md:cursor-text"
+              className="group flex items-center gap-6 text-white transition-all duration-500 ease-out hover:translate-x-3 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-x-0 cursor-pointer md:cursor-pointer"
             >
               <span className="text-3xl md:text-4xl font-black uppercase group-hover:text-brand-blue transition-colors duration-500">
                 SOLICITAR AGORA

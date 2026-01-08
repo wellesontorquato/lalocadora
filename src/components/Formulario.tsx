@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Calculator } from "lucide-react";
 
 export default function Formulario() {
+  const CONTACT = {
+    // ✅ só dígitos (DDD + número) — sem +, sem espaço, sem parênteses
+    phoneE164Digits: "5582996906585",
+  } as const;
+
   const [form, setForm] = useState({
     nome: "",
     carro: "",
@@ -23,6 +28,13 @@ export default function Formulario() {
 
   const toISODate = (d: Date) =>
     `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+
+  // ✅ ISO (YYYY-MM-DD) -> DD/MM/YYYY (melhora a msg do Whats)
+  const formatBR = (iso: string) => {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-");
+    return `${d}/${m}/${y}`;
+  };
 
   // evita bug timezone (sempre meio-dia)
   const parseISODate = (iso: string) => {
@@ -57,7 +69,9 @@ export default function Formulario() {
 
   // mínimo de devolução (sempre +1 dia da retirada; se cair domingo, pula)
   const minDataDevolucao = useMemo(() => {
-    const baseRetirada = form.dataRetirada ? nextNonSundayISO(form.dataRetirada) : minDataRetirada;
+    const baseRetirada = form.dataRetirada
+      ? nextNonSundayISO(form.dataRetirada)
+      : minDataRetirada;
 
     let min = addDaysISO(baseRetirada, 1);
     min = nextNonSundayISO(min);
@@ -158,22 +172,38 @@ export default function Formulario() {
     }
   }, [form]);
 
-  const enviarWhats = (e: React.FormEvent) => {
+  // ✅ habilita CTA só quando estiver tudo preenchido + total calculado
+  const pronto = Boolean(
+    form.nome.trim() &&
+      form.carro &&
+      form.dataRetirada &&
+      form.dataDevolucao &&
+      total !== null
+  );
+
+  const enviarWhats = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const numero = "5582996906585";
-    const valorEstimado = total ? `\n💰 *Valor Estimado:* R$ ${total.toLocaleString("pt-BR")}` : "";
+
+    // fecha teclado no mobile pra evitar "primeiro toque só fecha teclado"
+    (document.activeElement as HTMLElement | null)?.blur?.();
+
+    if (!pronto || total === null) return;
 
     const texto = `Olá L.A. Locadora!
 Me chamo ${form.nome}.
 *Pedido de Reserva:*
 🚗 Veículo: ${form.carro}
-📅 Retirada: ${form.dataRetirada}
-📅 Devolução: ${form.dataDevolucao}
-🛣️ Plano: ${form.quilometragem}${valorEstimado}
+📅 Retirada: ${formatBR(form.dataRetirada)}
+📅 Devolução: ${formatBR(form.dataDevolucao)}
+🛣️ Plano: ${form.quilometragem}
+💰 *Valor Estimado:* R$ ${total.toLocaleString("pt-BR")}
 
 Como podemos prosseguir?`;
 
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`, "_blank");
+    const url = `https://wa.me/${CONTACT.phoneE164Digits}?text=${encodeURIComponent(texto)}`;
+
+    // ✅ Mobile/iOS: window.location é mais confiável que window.open
+    window.location.href = url;
   };
 
   return (
@@ -215,9 +245,13 @@ Como podemos prosseguir?`;
               >
                 <div className="flex items-center gap-2 mb-2 text-brand-blue">
                   <Calculator size={14} />
-                  <span className="text-[10px] font-black uppercase">Estimativa (c/ Lavagem)</span>
+                  <span className="text-[10px] font-black uppercase">
+                    Estimativa (c/ Lavagem)
+                  </span>
                 </div>
-                <div className="text-4xl font-black italic">R$ {total.toLocaleString("pt-BR")}</div>
+                <div className="text-4xl font-black italic">
+                  R$ {total.toLocaleString("pt-BR")}
+                </div>
                 <p className="text-[9px] text-gray-500 mt-2 uppercase tracking-tighter">
                   *Taxa de lavagem inclusa
                 </p>
@@ -226,7 +260,10 @@ Como podemos prosseguir?`;
           </AnimatePresence>
         </div>
 
-        <form onSubmit={enviarWhats} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
+        <form
+          onSubmit={enviarWhats}
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10"
+        >
           {/* Input Nome */}
           <div className="group flex flex-col gap-3 border-b border-white/10 hover:border-brand-blue/50 transition-colors duration-500 pb-2">
             <label className="text-[9px] uppercase tracking-[0.3em] text-gray-500 group-hover:text-brand-blue transition-colors duration-500 font-bold">
@@ -332,13 +369,17 @@ Como podemos prosseguir?`;
           <div className="md:col-span-2 flex justify-end pt-4">
             <button
               type="submit"
-              className="group flex items-center gap-6 text-white transition-all duration-500 ease-out hover:translate-x-3"
+              disabled={!pronto}
+              className="group flex items-center gap-6 text-white transition-all duration-500 ease-out hover:translate-x-3 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-x-0 cursor-pointer md:cursor-pointer"
             >
               <span className="text-3xl md:text-4xl font-black uppercase group-hover:text-brand-blue transition-colors duration-500">
                 SOLICITAR AGORA
               </span>
               <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-blue group-hover:border-brand-blue transition-all duration-500">
-                <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform duration-500" />
+                <ArrowRight
+                  size={24}
+                  className="group-hover:translate-x-1 transition-transform duration-500"
+                />
               </div>
             </button>
           </div>
